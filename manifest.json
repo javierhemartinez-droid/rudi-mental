@@ -1,0 +1,13 @@
+{
+  "name": "Rudimental",
+  "short_name": "Rudimental",
+  "description": "40 rudimentos PAS con metrónomo y entrenamiento progresivo",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f0f12",
+  "theme_color": "#1a1a1f",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
