@@ -191,37 +191,25 @@ body{
 }
 .mtbtn.active{background:var(--gold);color:#111;font-weight:700}
 
-/* Extremidades */
+/* Extremidades (Manos y Pies) */
 .limbs-wrapper{display:flex;flex-direction:column;align-items:center;gap:0}
 .hands-row{display:flex;gap:12px;justify-content:center;margin-bottom:12px}
 .foot-row{display:none;gap:12px;justify-content:center;margin-top:2px;margin-bottom:12px;border-top:1px dashed var(--border);padding-top:12px;width:100%;max-width:160px}
 .foot-row.show{display:flex}
 
-.hand-btn{
+.hb{
   width:58px;height:58px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;
   font-family:var(--serif);font-size:24px;font-weight:700;
   border:2px solid var(--border);background:var(--s2);color:var(--dim);
   transition:all 0.08s;
 }
-.hand-btn.lit-D{
-  background:var(--blue-bg);border-color:var(--blue);color:var(--blue);
-  box-shadow:0 0 18px rgba(126,184,200,0.25);transform:scale(1.08);
-}
-.hand-btn.lit-I{
-  background:var(--red-bg);border-color:var(--red);color:var(--red);
-  box-shadow:0 0 18px rgba(224,120,120,0.25);transform:scale(1.08);
-}
-.hand-btn.lit-K{
-  background:var(--purple-bg);border-color:var(--purple);color:var(--purple);
-  box-shadow:0 0 18px rgba(179,136,255,0.25);transform:scale(1.08);
-}
-.hand-btn.lit-H{
-  background:var(--emerald-bg);border-color:var(--emerald);color:var(--emerald);
-  box-shadow:0 0 18px rgba(128,203,116,0.25);transform:scale(1.08);
-}
-.hand-btn.grace-d{background:rgba(126,184,200,0.04);border-color:rgba(126,184,200,0.35);color:rgba(126,184,200,0.45);transform:scale(1.01)}
-.hand-btn.grace-i{background:rgba(224,120,120,0.04);border-color:rgba(224,120,120,0.35);color:rgba(224,120,120,0.45);transform:scale(1.01)}
+.hb.ld{background:var(--blue-bg);border-color:var(--blue);color:var(--blue);box-shadow:0 0 18px rgba(126,184,200,0.25);transform:scale(1.08)}
+.hb.li{background:var(--red-bg);border-color:var(--red);color:var(--red);box-shadow:0 0 18px rgba(224,120,120,0.25);transform:scale(1.08)}
+.hb.lk{background:var(--purple-bg);border-color:var(--purple);color:var(--purple);box-shadow:0 0 18px rgba(179,136,255,0.25);transform:scale(1.08)}
+.hb.lh{background:var(--emerald-bg);border-color:var(--emerald);color:var(--emerald);box-shadow:0 0 18px rgba(128,203,116,0.25);transform:scale(1.08)}
+.hb.grace-d{background:rgba(126,184,200,0.04);border-color:rgba(126,184,200,0.35);color:rgba(126,184,200,0.45);transform:scale(1.01)}
+.hb.grace-i{background:rgba(224,120,120,0.04);border-color:rgba(224,120,120,0.35);color:rgba(224,120,120,0.45);transform:scale(1.01)}
 
 /* bpm controls */
 .bpm-row{display:flex;align-items:center;gap:10px}
@@ -251,129 +239,4 @@ body{
 .train-block{display:none;flex-direction:column;gap:10px}
 .train-block.show{display:flex}
 .free-block{display:flex;flex-direction:column;gap:10px}
-.tgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.tfield label{display:block;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--dim);margin-bottom:4px}
-.tfield input{
-  width:100%;padding:6px 8px;
-  font-family:var(--sans);font-size:14px;font-weight:300;
-  background:var(--s2);border:1px solid var(--border);
-  border-radius:4px;color:var(--text);outline:none;
-  transition:border-color 0.15s;
-}
-.tfield input:focus{border-color:var(--gold)}
-.train-status{font-size:11px;color:var(--muted);min-height:14px}
-.train-status .hl{color:var(--gold);font-weight:700}
-.train-controls{display:flex;align-items:center;gap:10px}
-.prog-wrap{flex:1;height:2px;background:var(--border);border-radius:1px;overflow:hidden}
-.prog-bar{height:100%;background:var(--gold);width:0%;transition:width 0.3s}
-
-/* tip */
-.tip{
-  flex-shrink:0;
-  padding:10px 12px;
-  background:var(--s1);border:1px solid var(--border);
-  border-left:3px solid var(--gold);border-radius:0 var(--r) var(--r) 0;
-  font-size:12px;line-height:1.6;color:#bbb;font-weight:300;
-}
-
-/* ── MOBILE ── */
-@media(max-width:580px){
-  html,body{overflow:auto;height:auto}
-  .body{grid-template-columns:1fr;overflow:visible}
-  .rud-list{max-height:180px;border-right:none;border-bottom:1px solid var(--border)}
-  .panel{overflow:visible}
-  .hand-btn{width:52px;height:52px;font-size:20px}
-}
-</style>
-</head>
-<body>
-
-<div class="header">
-  <div class="logo">Rudi<em>mental</em></div>
-  <div class="bpm-header">
-    <div class="bpm-num" id="hBpm">80</div>
-    <div class="bpm-unit">BPM</div>
-  </div>
-</div>
-
-<div class="tabs" id="tabsRow"></div>
-
-<div class="body">
-  <div class="rud-list" id="rudList"></div>
-
-  <div class="panel">
-    <div class="rud-header">
-      <div class="rud-name" id="rudName">—</div>
-      <div class="rud-sub">
-        <span class="cat-pill" id="catPill"></span>
-        <span id="rudNum"></span>
-      </div>
-    </div>
-
-    <div class="seq-wrap">
-      <div class="seq-label">Secuencia</div>
-      <div class="seq-row" id="seqRow"></div>
-    </div>
-
-    <div class="practice">
-      <div class="practice-top">
-        <span class="prac-label">Práctica</span>
-        <div class="mtoggle">
-          <button class="mtbtn active" id="btnFree" onclick="setMode('free')">Libre</button>
-          <button class="mtbtn" id="btnTrain" onclick="setMode('train')">Entrenamiento</button>
-        </div>
-      </div>
-
-      <div class="limbs-wrapper">
-        <div class="hands-row">
-          <div class="hand-btn" id="handD">D</div>
-          <div class="hand-btn" id="handI">I</div>
-        </div>
-        <div class="foot-row" id="footRow">
-          <div class="hand-btn" id="handK">K</div>
-          <div class="hand-btn" id="handH">H</div>
-        </div>
-      </div>
-
-      <div class="free-block" id="freeBlock">
-        <div class="bpm-row">
-          <input type="range" class="bpm-slider" id="bpmSlider" min="30" max="240" value="80" oninput="setBpm(this.value)">
-          <button class="play-btn" id="playBtn" onclick="togglePlay()">
-            <svg id="playIco" width="14" height="14" viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg>
-          </button>
-        </div>
-        <div class="pulse-row" id="pulseRow"></div>
-      </div>
-
-      <div class="train-block" id="trainBlock">
-        <div class="tgrid">
-          <div class="tfield"><label>Inicio BPM</label><input type="number" id="tStart" value="60" min="30" max="240"></div>
-          <div class="tfield"><label>Objetivo BPM</label><input type="number" id="tTarget" value="120" min="30" max="240"></div>
-          <div class="tfield"><label>Incremento</label><input type="number" id="tStep" value="5" min="1" max="20"></div>
-          <div class="tfield"><label>Compases</label><input type="number" id="tBars" value="4" min="1" max="32"></div>
-        </div>
-        <div class="train-status" id="trainStatus">—</div>
-        <div class="train-controls">
-          <button class="play-btn" id="trainPlayBtn" onclick="toggleTrain()">
-            <svg id="trainIco" width="14" height="14" viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg>
-          </button>
-          <div class="prog-wrap"><div class="prog-bar" id="progBar"></div></div>
-        </div>
-        <div class="pulse-row" id="trainPulseRow"></div>
-      </div>
-    </div>
-
-    <div class="tip" id="tipBox"></div>
-  </div>
-</div>
-
-<script>
-// ── DATA ──────────────────────────────────────────────
-const CATS = ["Redobles","Diddles","Flams","Drags","Warm-ups"];
-const COL = {Redobles:"#7eb8c8",Diddles:"#e8b86d",Flams:"#e07878",Drags:"#7ec8a0","Warm-ups":"#b388ff"};
-
-const R = [
-  {id:1,cat:"Redobles",name:"Redoble Simple",seq:["D","I","D","I","D","I","D","I"],tip:"La base de todo. Asegurate de que D e I suenen igual de fuerte."},
-  {id:2,cat:"Redobles",name:"Double Stroke Roll",seq:["D","D","I","I","D","D","I","I"],tip:"Dos golpes seguidos. Relajá la muñeca para el rebote natural."},
-  {id:3,cat:"Redobles",name
-  
+.tgrid{display:grid;grid-template-columns:1fr 1fr;gap:8
