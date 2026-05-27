@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Warm-UP · Rudimental</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1a1a1f">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f0f12;--s1:#1a1a1f;--s2:#222228;--s3:#2a2a32;
+  --border:#2e2e3a;--text:#e8e4d9;--muted:#aaa;--dim:#4a4a55;
+  --gold:#e8b86d;--gold-bg:rgba(232,184,109,0.10);
+  --blue:#7eb8c8;--blue-bg:rgba(126,184,200,0.12);
+  --red:#e07878;--red-bg:rgba(224,120,120,0.14);
+  --purple:#b388ff;--purple-bg:rgba(179,136,255,0.12);
+  --emerald:#80cb74;--emerald-bg:rgba(128,203,116,0.14);
+  --sans:'Lato',sans-serif;--serif:'Playfair Display',serif;
+}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--sans)}
+body{display:flex;flex-direction:column;height:100dvh;overflow:hidden}
+::-webkit-scrollbar{width:3px;height:3px;background:transparent}
+::-webkit-scrollbar-thumb{background:var(--dim);border-radius:3px}
+
+/* HEADER */
+.hdr{
+  flex-shrink:0;display:flex;align-items:center;justify-content:space-between;
+  padding:14px 18px 12px;background:var(--s1);border-bottom:1px solid var(--border);
+}
+.logo{font-family:var(--serif);font-size:18px;color:var(--text)}
+.logo em{color:var(--purple);font-style:normal}
+.hdr-r{display:flex;align-items:center;gap:12px}
+.nav-link{
+  display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:6px;
+  border:1px solid var(--border);background:var(--s2);color:var(--muted);
+  font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;
+  text-decoration:none;transition:all 0.15s;
+}
+.nav-link:hover{border-color:var(--gold);color:var(--gold)}
+.bpm-badge{display:flex;align-items:baseline;gap:4px}
+.bpm-input{
+  -webkit-appearance:none;appearance:none;width:52px;text-align:center;
+  font-family:var(--serif);font-size:22px;color:var(--purple);
+  background:transparent;border:none;border-bottom:1px solid var(--border);
+  outline:none;padding:0 2px 2px;transition:border-color 0.15s;
+}
+.bpm-input:focus{border-color:var(--purple)}
+.bpm-input::-webkit-inner-spin-button,.bpm-input::-webkit-outer-spin-button{-webkit-appearance:none}
+.bpm-input[type=number]{-moz-appearance:textfield}
+.bpm-u{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+
+/* TABS */
+.tabs{
+  flex-shrink:0;display:flex;gap:6px;padding:10px 14px 9px;
+  background:var(--s1);border-bottom:1px solid var(--border);overflow-x:auto;
+}
+.tabs::-webkit-scrollbar{display:none}
+.tab{
+  flex-shrink:0;padding:5px 14px;border-radius:20px;
+  border:1.5px solid var(--border);background:transparent;
+  color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;
+  font-family:var(--sans);transition:all 0.15s;
+}
+.tab.on{background:var(--purple);border-color:var(--purple);color:#111}
+.tab:not(.on):hover{border-color:var(--purple);color:var(--purple)}
+
+/* MAIN */
+.main{flex:1;overflow-y:auto;display:flex;flex-direction:column}
+.main::-webkit-scrollbar{width:3px}.main::-webkit-scrollbar-thumb{background:var(--dim);border-radius:3px}
+
+/* SELECTOR */
+.rud-selector{padding:10px 14px;border-bottom:1px solid var(--border);background:var(--s1)}
+.cat-row{margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.cat-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.cat-name{font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:700}
+.pills{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}
+.pills::-webkit-scrollbar{display:none}
+.pill{
+  flex-shrink:0;padding:4px 11px;border-radius:14px;
+  border:1px solid var(--border);background:transparent;
+  color:var(--muted);font-size:11px;cursor:pointer;
+  font-family:var(--sans);transition:all 0.12s;white-space:nowrap;
+}
+.pill.on{color:#111;font-weight:700}
+.pill:not(.on):hover{border-color:var(--purple);color:var(--purple)}
+
+/* PANEL */
+.panel{flex:1;display:flex;flex-direction:column;gap:10px;padding:14px 16px 16px}
+
+.rud-hdr{flex-shrink:0}
+.rud-name{font-family:var(--serif);font-size:22px;font-weight:400;line-height:1.15}
+.rud-sub{display:flex;align-items:center;gap:8px;margin-top:4px}
+.cat-pill{padding:2px 8px;border-radius:10px;font-size:9px;letter-spacing:1px;font-weight:700}
+.rud-num{font-size:10px;letter-spacing:2px;color:var(--dim);text-transform:uppercase}
+
+/* sequence */
+.seq-box{flex-shrink:0;background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:12px 12px 10px}
+.sec-lbl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:9px}
+.seq-row{display:flex;flex-wrap:wrap;gap:5px}
+.sq{
+  width:34px;height:34px;border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;border:1px solid var(--border);background:var(--s2);
+  transition:all 0.07s;
+}
+.sq.D{color:var(--blue)}.sq.I{color:var(--red)}
+.sq.K{color:var(--gold)}.sq.H{color:var(--emerald)}
+.sq.act{transform:scale(1.14);border-color:currentColor}
+.sq.act.D{background:var(--blue-bg)}.sq.act.I{background:var(--red-bg)}
+.sq.act.K{background:var(--gold-bg)}.sq.act.H{background:var(--emerald-bg)}
+
+/* practice */
+.prac-box{flex-shrink:0;background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:14px}
+.prac-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:8px;flex-wrap:wrap}
+.prac-lbl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--dim)}
+.prac-top-r{display:flex;align-items:center;gap:8px}
+
+/* mode toggle */
+.mtog{display:flex;border:1px solid var(--border);border-radius:5px;overflow:hidden}
+.mb{padding:5px 13px;font-size:10px;letter-spacing:1px;text-transform:uppercase;border:none;background:transparent;color:var(--dim);cursor:pointer;font-family:var(--sans);transition:all 0.15s}
+.mb.on{background:var(--purple);color:#111;font-weight:700}
+
+/* zurdo btn */
+.zurdo-btn{
+  padding:5px 11px;border-radius:5px;font-size:10px;font-weight:700;letter-spacing:1px;
+  text-transform:uppercase;border:1px solid var(--border);background:transparent;
+  color:var(--muted);cursor:pointer;font-family:var(--sans);transition:all 0.15s;
+}
+.zurdo-btn.on{background:var(--purple-bg);border-color:var(--purple);color:var(--purple)}
+
+/* limbs grid */
+.limbs{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;
+  background:rgba(0,0,0,0.2);padding:12px;border-radius:8px;
+  border:1px dashed var(--border);margin-bottom:14px;
+}
+.limb{display:flex;flex-direction:column;align-items:center;gap:5px}
+.limb-lbl{font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--dim);font-weight:700}
+.hb{
+  width:58px;height:58px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--serif);font-size:22px;font-weight:700;
+  border:2px solid var(--border);background:var(--s2);color:var(--dim);
+  transition:all 0.08s;
+}
+.hb.ld{background:var(--blue-bg);border-color:var(--blue);color:var(--blue);box-shadow:0 0 16px rgba(126,184,200,0.22);transform:scale(1.08)}
+.hb.li{background:var(--red-bg);border-color:var(--red);color:var(--red);box-shadow:0 0 16px rgba(224,120,120,0.22);transform:scale(1.08)}
+.hb.lk{background:var(--gold-bg);border-color:var(--gold);color:var(--gold);box-shadow:0 0 16px rgba(232,184,109,0.22);transform:scale(1.08)}
+.hb.lh{background:var(--emerald-bg);border-color:var(--emerald);color:var(--emerald);box-shadow:0 0 16px rgba(128,203,116,0.22);transform:scale(1.08)}
+
+/* sound + tap */
+.sound-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:10px}
+.sound-sel{display:flex;border:1px solid var(--border);border-radius:5px;overflow:hidden;flex:1}
+.sbtn{flex:1;padding:5px 0;font-size:10px;letter-spacing:1px;text-transform:uppercase;border:none;background:transparent;color:var(--dim);cursor:pointer;font-family:var(--sans);transition:all 0.15s}
+.sbtn.on{background:var(--s3);color:var(--text);font-weight:600}
+.sbtn:not(.on):hover{color:var(--muted)}
+.tap-btn{padding:7px 14px;border-radius:5px;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-size:11px;font-weight:700;letter-spacing:2px;cursor:pointer;font-family:var(--sans);transition:all 0.15s;flex-shrink:0}
+.tap-btn:hover{border-color:var(--purple);color:var(--purple)}
+.tap-btn:active{background:var(--purple-bg);border-color:var(--purple);color:var(--purple)}
+
+/* bpm row */
+.bpm-row{display:flex;align-items:center;gap:8px}
+.bslider{flex:1;-webkit-appearance:none;height:2px;background:var(--border);outline:none;cursor:pointer;border-radius:1px}
+.bslider::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--purple);cursor:pointer}
+.bpm-adj{width:32px;height:32px;border-radius:6px;flex-shrink:0;border:1px solid var(--border);background:var(--s2);color:var(--muted);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.12s;user-select:none}
+.bpm-adj:hover{border-color:var(--purple);color:var(--purple)}
+.bpm-adj:active{background:var(--purple-bg)}
+.pbtn{width:44px;height:44px;border-radius:50%;border:1.5px solid var(--purple);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--purple);transition:all 0.15s;flex-shrink:0}
+.pbtn:hover,.pbtn.on{background:var(--purple);color:#111}
+.pbtn svg{fill:currentColor}
+
+/* dots */
+.dots{display:flex;gap:6px;justify-content:center;margin-top:10px;flex-wrap:wrap}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--border);transition:background 0.05s}
+.dot.on{background:var(--purple)}
+
+/* train */
+.tblock{display:none;flex-direction:column;gap:10px}
+.tblock.show{display:flex}
+.fblock{display:flex;flex-direction:column;gap:10px}
+.tgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tf label{display:block;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--dim);margin-bottom:4px}
+.tf input{width:100%;padding:7px 10px;font-family:var(--sans);font-size:15px;font-weight:300;background:var(--s2);border:1px solid var(--border);border-radius:4px;color:var(--text);outline:none;transition:border-color 0.15s}
+.tf input:focus{border-color:var(--purple)}
+.tstat{font-size:11px;color:var(--muted);min-height:15px}
+.tstat .hl{color:var(--purple);font-weight:700}
+.tctrl{display:flex;align-items:center;gap:10px}
+.pw{flex:1;height:2px;background:var(--border);border-radius:1px;overflow:hidden}
+.pb{height:100%;background:var(--purple);width:0%;transition:width 0.3s}
+
+/* tip */
+.tip{flex-shrink:0;padding:11px 14px;background:var(--s1);border:1px solid var(--border);border-left:3px solid var(--purple);border-radius:0 10px 10px 0;font-size:13px;line-height:1.65;color:#bbb;font-weight:300}
+
+@media(max-width:580px){
+  html,body{overflow:auto;height:auto}
+  .main{overflow:visible}
+}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="logo">Warm-<em>UP</em></div>
+  <div class="hdr-r">
+    <a href="index.html" class="nav-link">⇄ Rudimental</a>
+    <div class="bpm-badge">
+      <input type="number" class="bpm-input" id="hBpm" value="80" min="30" max="300"
+        onchange="setBpmFromInput(this.value)" oninput="setBpmFromInput(this.value)">
+      <span class="bpm-u">BPM</span>
+    </div>
+  </div>
+</div>
+
+<div class="tabs" id="tabsRow"></div>
+
+<div class="main">
+  <div class="rud-selector" id="rudSelector"></div>
+
+  <div class="panel">
+    <div class="rud-hdr">
+      <div class="rud-name" id="rudName">—</div>
+      <div class="rud-sub">
+        <span class="cat-pill" id="catPill"></span>
+        <span class="rud-num" id="rudNum"></span>
+      </div>
+    </div>
+
+    <div class="seq-box">
+      <div class="sec-lbl">Secuencia de extremidades</div>
+      <div class="seq-row" id="seqRow"></div>
+    </div>
+
+    <div class="prac-box">
+      <div class="prac-top">
+        <span class="prac-lbl">Práctica</span>
+        <div class="prac-top-r">
+          <button class="zurdo-btn" id="zurdoBtn" onclick="toggleZurdo()">↔ Zurdo</button>
+          <div class="mtog">
+            <button class="mb on" id="btnFree" onclick="setMode('free')">Libre</button>
+            <button class="mb" id="btnTrain" onclick="setMode('train')">Entrenamiento</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 extremidades: I, D arriba / H, K abajo -->
+      <div class="limbs">
+        <div class="limb"><span class="limb-lbl">Mano I</span><div class="hb" id="hI">I</div></div>
+        <div class="limb"><span class="limb-lbl">Mano D</span><div class="hb" id="hD">D</div></div>
+        <div class="limb"><span class="limb-lbl">Hi-Hat</span><div class="hb" id="hH">H</div></div>
+        <div class="limb"><span class="limb-lbl">Bombo</span><div class="hb" id="hK">K</div></div>
+      </div>
+
+      <div class="sound-row">
+        <div class="sound-sel">
+          <button class="sbtn on" id="sClick" onclick="setSound('click')">Click</button>
+          <button class="sbtn" id="sWood" onclick="setSound('wood')">Wood</button>
+          <button class="sbtn" id="sCow" onclick="setSound('cowbell')">Cowbell</button>
+        </div>
+        <button class="tap-btn" id="tapBtn" onclick="tapTempo()">TAP</button>
+      </div>
+
+      <div class="fblock" id="fblock">
+        <div class="bpm-row">
+          <button class="bpm-adj" onclick="adjustBpm(-1)">−</button>
+          <input type="range" class="bslider" id="bslider" min="30" max="300" value="80" oninput="setBpm(this.value)">
+          <button class="bpm-adj" onclick="adjustBpm(1)">+</button>
+          <button class="pbtn" id="pbtn" onclick="togglePlay()">
+            <svg id="pico" width="15" height="15" viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg>
+          </button>
+        </div>
+        <div class="dots" id="dotsF"></div>
+      </div>
+
+      <div class="tblock" id="tblock">
+        <div class="tgrid">
+          <div class="tf"><label>Inicio BPM</label><input type="number" id="tStart" value="60" min="30" max="300"></div>
+          <div class="tf"><label>Objetivo BPM</label><input type="number" id="tTarget" value="120" min="30" max="300"></div>
+          <div class="tf"><label>Incremento</label><input type="number" id="tStep" value="5" min="1" max="20"></div>
+          <div class="tf"><label>Compases</label><input type="number" id="tBars" value="4" min="1" max="32"></div>
+        </div>
+        <div class="tstat" id="tstat">—</div>
+        <div class="tctrl">
+          <button class="pbtn" id="tpbtn" onclick="toggleTrain()">
+            <svg id="tico" width="15" height="15" viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg>
+          </button>
+          <div class="pw"><div class="pb" id="pbar"></div></div>
+        </div>
+        <div class="dots" id="dotsT"></div>
+      </div>
+    </div>
+
+    <div class="tip" id="tipBox"></div>
+  </div>
+</div>
+
+<script>
+const CATS = ["Warm-ups","Fills Lineales","Independencia"];
+const COL = {"Warm-ups":"#b388ff","Fills Lineales":"#7eb8c8","Independencia":"#e8b86d"};
+
+const R = [
+  {id:1,cat:"Warm-ups",name:"Calentamiento Lineal Base",seq:["I","D","K","H","I","D","K","H"],tip:"Fluidez continua. Buscá que la transición de manos a pies sea uniforme, sin baches ni apuros en el tempo."},
+  {id:2,cat:"Warm-ups",name:"Cimiento Rock",seq:["K","D","H","D","K","D","H","D"],tip:"El Bombo (K) y el Hi-hat (H) arman la base rítmica mientras las manos mantienen el pulso alternado estable."},
+  {id:3,cat:"Warm-ups",name:"Dobles Combinados",seq:["D","D","I","I","K","K","H","H"],tip:"Excelente para emparejar la fuerza de los golpes dobles tanto en manos como en pedales."},
+  {id:4,cat:"Warm-ups",name:"Paso de Antorcha",seq:["D","I","D","I","K","H","K","H"],tip:"Bloques de 4. Las manos entregan el control directamente a los pies de forma cíclica."},
+  {id:5,cat:"Fills Lineales",name:"Seisillo Clásico",seq:["D","I","D","I","K","K"],tip:"El rey de los fills modernos. Bajás rápido por los toms y cerrás con doble bombo contundente."},
+  {id:6,cat:"Fills Lineales",name:"Tresillo Mano-Mano-Pie",seq:["D","I","K","D","I","K"],tip:"Agrupación de a 3 notas. Genera una subdivisión que rompe la cuadratura sobre ritmos de 4/4."},
+  {id:7,cat:"Fills Lineales",name:"Rulo de 5 Lineal",seq:["D","I","D","I","K"],tip:"Ideal para cortes rápidos al final de una frase antes de caer al platillo en el tiempo uno."},
+  {id:8,cat:"Fills Lineales",name:"Herta Coordinada",seq:["D","I","D","K","I","D","I","K"],tip:"Subdivisión herta clásica intercalando un golpe de bombo. Control total de coordinación."},
+  {id:9,cat:"Independencia",name:"Paradiddle con Kick doble",seq:["D","I","K","K","I","D","K","K"],tip:"El diddle de manos se reemplaza por doble bombo (K). Control de pedal al límite."},
+  {id:10,cat:"Independencia",name:"Desplazamiento de Hi-Hat",seq:["D","H","I","H","D","H","I","H"],tip:"Las manos alternan mientras el pie izquierdo clava el contratiempo rígido con el Hi-hat."},
+  {id:11,cat:"Independencia",name:"Síncopa de Bombo Intercalado",seq:["D","K","I","K","D","I","K","K"],tip:"La mano mantiene el pulso mientras el bombo busca los espacios vacíos generando un quiebre rítmico."},
+];
+
+// ── STATE ──
+let curId=1, activeCat="Todos", curMode="free", esZurdo=false;
+let audioCtx=null, playing=false, bpm=80;
+let nextBeat=0, beat=0, sch=null;
+let trainBpm=60, trainBeats=0;
+let curSound='click';
+let tapTimes=[];
+let _noiseBuffer=null;
+
+// ── TABS ──
+function buildTabs(){
+  const row=document.getElementById('tabsRow'); row.innerHTML='';
+  ["Todos",...CATS].forEach(c=>{
+    const b=document.createElement('button');
+    b.className='tab'+(c===activeCat?' on':'');
+    b.textContent=c; b.onclick=()=>filterCat(c);
+    row.appendChild(b);
+  });
+}
+
+function filterCat(cat){
+  activeCat=cat;
+  document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.textContent===cat));
+  buildSelector();
+  const first=R.find(r=>cat==='Todos'||r.cat===cat);
+  if(first) selectRud(first.id);
+}
+
+// ── SELECTOR ──
+function buildSelector(){
+  const el=document.getElementById('rudSelector'); el.innerHTML='';
+  const cats=activeCat==='Todos'?CATS:[activeCat];
+  cats.forEach(cat=>{
+    const col=COL[cat];
+    const items=R.filter(r=>r.cat===cat);
+    const div=document.createElement('div');
+    div.style.marginBottom='10px';
+    div.innerHTML=`<div class="cat-row">
+      <div class="cat-dot" style="background:${col}"></div>
+      <span class="cat-name" style="color:${col}">${cat}</span>
+    </div>
+    <div class="pills">${items.map(r=>`
+      <button class="pill${r.id===curId?' on':''}" id="pill-${r.id}"
+        style="${r.id===curId?`background:${col};border-color:${col};color:#111;font-weight:700;`:''}"
+        onclick="selectRud(${r.id})">${r.name}</button>`).join('')}
+    </div>`;
+    el.appendChild(div);
+  });
+}
+
+// ── SELECT ──
+function selectRud(id){
+  curId=id;
+  document.querySelectorAll('.pill').forEach(p=>{
+    p.classList.remove('on'); p.style.background=''; p.style.borderColor=''; p.style.color=''; p.style.fontWeight='';
+  });
+  const r=R.find(x=>x.id===id); if(!r) return;
+  const col=COL[r.cat];
+  const pill=document.getElementById(`pill-${id}`);
+  if(pill){
+    pill.classList.add('on'); pill.style.background=col;
+    pill.style.borderColor=col; pill.style.color='#111'; pill.style.fontWeight='700';
+    pill.scrollIntoView({block:'nearest',inline:'center'});
+  }
+  document.getElementById('rudName').textContent=r.name;
+  document.getElementById('catPill').textContent=r.cat;
+  document.getElementById('catPill').style.cssText=`background:${col}22;color:${col}`;
+  document.getElementById('rudNum').textContent=`Ex. ${String(r.id).padStart(2,'0')}`;
+  document.getElementById('tipBox').textContent=r.tip;
+
+  // Secuencia — aplicar modo zurdo si corresponde
+  const seqRow=document.getElementById('seqRow'); seqRow.innerHTML='';
+  r.seq.forEach((h,i)=>{
+    const display=esZurdo?swapLimb(h):h;
+    const d=document.createElement('div');
+    d.className=`sq ${display}`; d.id=`sq-${i}`; d.textContent=display;
+    seqRow.appendChild(d);
+  });
+  buildDots('dotsF',r.seq.length);
+  buildDots('dotsT',r.seq.length);
+  clearLimbs();
+}
+
+function swapLimb(h){
+  if(h==='D') return 'I'; if(h==='I') return 'D';
+  if(h==='K') return 'H'; if(h==='H') return 'K';
+  return h;
+}
+
+function toggleZurdo(){
+  esZurdo=!esZurdo;
+  document.getElementById('zurdoBtn').classList.toggle('on',esZurdo);
+  selectRud(curId);
+}
+
+function clearLimbs(){
+  ['hI','hD','hH','hK'].forEach(id=>document.getElementById(id).className='hb');
+}
+
+function buildDots(id,n){
+  const row=document.getElementById(id); row.innerHTML='';
+  for(let i=0;i<n;i++){const d=document.createElement('div');d.className='dot';row.appendChild(d)}
+}
+
+// ── AUDIO ──
+function ctx(){
+  if(!audioCtx) audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function getNoiseBuffer(){
+  if(_noiseBuffer) return _noiseBuffer;
+  const c=ctx(), len=c.sampleRate*0.1, buf=c.createBuffer(1,len,c.sampleRate);
+  const d=buf.getChannelData(0);
+  for(let i=0;i<len;i++) d[i]=(Math.random()*2-1);
+  _noiseBuffer=buf; return buf;
+}
+
+function setSound(s){
+  curSound=s;
+  document.querySelectorAll('.sbtn').forEach(b=>b.classList.remove('on'));
+  document.getElementById(s==='click'?'sClick':s==='wood'?'sWood':'sCow').classList.add('on');
+}
+
+function tick(time,acc){
+  const c=ctx();
+  if(curSound==='wood'){
+    const src=c.createBufferSource(); src.buffer=getNoiseBuffer();
+    const bp=c.createBiquadFilter(); bp.type='bandpass';
+    bp.frequency.value=acc?2200:1600; bp.Q.value=acc?0.8:1.2;
+    const g=c.createGain();
+    g.gain.setValueAtTime(acc?0.55:0.32,time);
+    g.gain.exponentialRampToValueAtTime(0.001,time+(acc?0.055:0.045));
+    src.connect(bp);bp.connect(g);g.connect(c.destination);
+    src.start(time);src.stop(time+0.08);
+    const o=c.createOscillator(),og=c.createGain();
+    o.frequency.value=acc?380:260;
+    og.gain.setValueAtTime(acc?0.18:0.10,time);
+    og.gain.exponentialRampToValueAtTime(0.001,time+0.025);
+    o.connect(og);og.connect(c.destination);
+    o.start(time);o.stop(time+0.03);
+  } else if(curSound==='cowbell'){
+    [540,800].forEach((freq,i)=>{
+      const o=c.createOscillator(),g=c.createGain();
+      o.type='square'; o.frequency.value=freq+(i*30);
+      g.gain.setValueAtTime(acc?0.22:0.14,time);
+      g.gain.exponentialRampToValueAtTime(0.001,time+(acc?0.45:0.3));
+      o.connect(g);g.connect(c.destination);
+      o.start(time);o.stop(time+0.5);
+    });
+    const ns=c.createBufferSource(); ns.buffer=getNoiseBuffer();
+    const hp=c.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=3000;
+    const ng=c.createGain();
+    ng.gain.setValueAtTime(acc?0.12:0.07,time);
+    ng.gain.exponentialRampToValueAtTime(0.001,time+0.04);
+    ns.connect(hp);hp.connect(ng);ng.connect(c.destination);
+    ns.start(time);ns.stop(time+0.05);
+  } else {
+    const o=c.createOscillator(),g=c.createGain();
+    o.frequency.value=acc?1200:880;
+    g.gain.setValueAtTime(acc?0.5:0.28,time);
+    g.gain.exponentialRampToValueAtTime(0.001,time+0.04);
+    o.connect(g);g.connect(c.destination);
+    o.start(time);o.stop(time+0.05);
+  }
+}
+
+// ── SCHEDULER ──
+function sched(){
+  const c=ctx();
+  const r=R.find(x=>x.id===curId);
+  const len=r?r.seq.length:4;
+  while(nextBeat<c.currentTime+0.1){
+    const abpm=curMode==='train'?trainBpm:bpm;
+    const spb=60/abpm;
+    const bi=beat%len;
+    tick(nextBeat,bi===0);
+    const dt=Math.max(0,(nextBeat-c.currentTime)*1000);
+    (function(b,bpm2,rr){
+      setTimeout(()=>{
+        if(!playing) return;
+        // dots
+        document.querySelectorAll(`#${curMode==='free'?'dotsF':'dotsT'} .dot`)
+          .forEach((d,i)=>d.classList.toggle('on',i===b));
+        // seq
+        if(rr) for(let i=0;i<rr.seq.length;i++){
+          const e=document.getElementById(`sq-${i}`);
+          if(e) e.classList.toggle('act',i===b);
+        }
+        // limbs
+        if(rr){
+          clearLimbs();
+          let h=rr.seq[b];
+          if(esZurdo) h=swapLimb(h);
+          if(h==='D') document.getElementById('hD').className='hb ld';
+          else if(h==='I') document.getElementById('hI').className='hb li';
+          else if(h==='K') document.getElementById('hK').className='hb lk';
+          else if(h==='H') document.getElementById('hH').className='hb lh';
+        }
+        // train progress
+        if(curMode==='train'){
+          const s0=parseInt(document.getElementById('tStart').value)||60;
+          const t0=parseInt(document.getElementById('tTarget').value)||120;
+          document.getElementById('pbar').style.width=Math.min(100,((bpm2-s0)/(t0-s0))*100)+'%';
+        }
+      },dt);
+    })(bi,abpm,r);
+
+    // train logic
+    if(curMode==='train'){
+      trainBeats++;
+      const tBars=parseInt(document.getElementById('tBars').value)||4;
+      const bpl=tBars*len;
+      if(trainBeats>=bpl){
+        trainBeats=0;
+        const tTarget=parseInt(document.getElementById('tTarget').value)||120;
+        const tStep=parseInt(document.getElementById('tStep').value)||5;
+        if(trainBpm>=tTarget){
+          setTimeout(()=>{stopEngine();document.getElementById('tstat').innerHTML=`<span class="hl">✓ ¡${tTarget} BPM alcanzado!</span>`},dt+500);
+        } else {
+          trainBpm=Math.min(trainBpm+tStep,tTarget);
+          setTimeout(()=>{
+            updStat(trainBpm,tTarget,tStep,parseInt(document.getElementById('tBars').value)||4);
+            setBpmUI(trainBpm);
+          },dt);
+        }
+      }
+    }
+    nextBeat+=spb; beat++;
+  }
+}
+
+// ── CONTROLES ──
+function setBpm(v){ bpm=Math.min(300,Math.max(30,parseInt(v)||30)); setBpmUI(bpm); }
+function setBpmFromInput(v){ setBpm(parseInt(v)||30); }
+function adjustBpm(d){ setBpm(bpm+d); }
+function setBpmUI(v){
+  const inp=document.getElementById('hBpm');
+  if(document.activeElement!==inp) inp.value=v;
+  document.getElementById('bslider').value=v;
+}
+
+function startEngine(){
+  stopEngine(); playing=true; ctx().resume();
+  nextBeat=ctx().currentTime+0.05; beat=0;
+  sch=setInterval(sched,25);
+  if(curMode==='free'){
+    document.getElementById('pbtn').classList.add('on');
+    document.getElementById('pico').innerHTML='<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
+  } else {
+    document.getElementById('tpbtn').classList.add('on');
+    document.getElementById('tico').innerHTML='<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
+  }
+}
+
+function stopEngine(){
+  playing=false; if(sch){clearInterval(sch);sch=null;}
+  document.getElementById('pbtn').classList.remove('on');
+  document.getElementById('pico').innerHTML='<polygon points="6,4 20,12 6,20"/>';
+  document.getElementById('tpbtn').classList.remove('on');
+  document.getElementById('tico').innerHTML='<polygon points="6,4 20,12 6,20"/>';
+  document.querySelectorAll('.dot').forEach(d=>d.classList.remove('on'));
+  const r=R.find(x=>x.id===curId);
+  if(r) for(let i=0;i<r.seq.length;i++){const e=document.getElementById(`sq-${i}`);if(e)e.classList.remove('act');}
+  document.getElementById('pbar').style.width='0%';
+  clearLimbs();
+}
+
+function togglePlay(){ playing&&curMode==='free'?stopEngine():(curMode='free',startEngine()); }
+
+function toggleTrain(){
+  if(playing&&curMode==='train'){stopEngine();return;}
+  const s=parseInt(document.getElementById('tStart').value)||60;
+  const t=parseInt(document.getElementById('tTarget').value)||120;
+  const st=parseInt(document.getElementById('tStep').value)||5;
+  const b=parseInt(document.getElementById('tBars').value)||4;
+  if(s>=t){alert('El inicio debe ser menor que el objetivo.');return;}
+  curMode='train'; trainBpm=s; trainBeats=0;
+  setBpmUI(trainBpm);
+  const r=R.find(x=>x.id===curId);
+  buildDots('dotsT',r?r.seq.length:4);
+  updStat(trainBpm,t,st,b);
+  startEngine();
+}
+
+function setMode(m){
+  stopEngine(); curMode=m;
+  document.getElementById('fblock').style.display=m==='free'?'flex':'none';
+  document.getElementById('tblock').classList.toggle('show',m==='train');
+  document.getElementById('btnFree').classList.toggle('on',m==='free');
+  document.getElementById('btnTrain').classList.toggle('on',m==='train');
+  setBpmUI(m==='free'?bpm:(parseInt(document.getElementById('tStart').value)||60));
+}
+
+function updStat(cur,t,st,b){
+  document.getElementById('tstat').innerHTML=`<span class="hl">${cur} BPM</span> → ${t} &nbsp;·&nbsp; +${st} cada ${b} comp.`;
+}
+
+function tapTempo(){
+  const now=performance.now();
+  if(tapTimes.length&&now-tapTimes[tapTimes.length-1]>2000) tapTimes=[];
+  tapTimes.push(now);
+  if(tapTimes.length<2) return;
+  const intervals=[];
+  for(let i=1;i<tapTimes.length;i++) intervals.push(tapTimes[i]-tapTimes[i-1]);
+  const avg=intervals.reduce((a,b)=>a+b,0)/intervals.length;
+  setBpm(Math.round(Math.min(300,Math.max(30,60000/avg))));
+  const btn=document.getElementById('tapBtn');
+  btn.style.borderColor='var(--purple)'; btn.style.color='var(--purple)';
+  setTimeout(()=>{btn.style.borderColor='';btn.style.color='';},200);
+  if(tapTimes.length>8) tapTimes=tapTimes.slice(-8);
+}
+
+// ── INIT ──
+buildTabs();
+buildSelector();
+selectRud(1);
+
+if("serviceWorker" in navigator){
+  window.addEventListener("load",()=>{try{navigator.serviceWorker.register("./sw.js")}catch(e){}});
+}
+</script>
+</body>
+</html>
