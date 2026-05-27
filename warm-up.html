@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Warm-UP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#0f0f12;--s1:#1a1a1f;--s2:#222228;--s3:#2a2a32;--border:#2e2e3a;--text:#e8e4d9;--muted:#888;--dim:#4a4a55;
+  --gold:#e8b86d;--gold-bg:rgba(232,184,109,0.10);
+  --blue:#7eb8c8;--blue-bg:rgba(126,184,200,0.10);
+  --red:#e07878;--red-bg:rgba(224,120,120,0.13);
+  --purple:#b388ff;--purple-bg:rgba(179,136,255,0.12);
+  --emerald:#80cb74;--emerald-bg:rgba(128,203,116,0.14);
+  --sans:'Lato',sans-serif;--serif:'Playfair Display',serif;--r:10px;
+}
+
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--sans)}
+body{display:flex;flex-direction:column;min-height:100vh;overflow-x:hidden}
+
+/* HEADER */
+.header{
+  flex-shrink:0;display:flex;align-items:center;justify-content:space-between;
+  padding:14px 16px;background:var(--s1);border-bottom:1px solid var(--border);
+}
+.logo{font-family:var(--serif);font-size:18px;color:var(--text);line-height:1;font-weight:700}
+.logo em{color:var(--purple);font-style:normal}
+
+.header-controls{display:flex;align-items:center;gap:14px}
+.nav-link-btn{
+  display:flex;align-items:center;gap:6px;
+  padding:6px 12px;border-radius:6px;
+  border:1px solid var(--border);background:var(--s2);
+  color:var(--gold);font-size:11px;font-weight:700;
+  text-transform:uppercase;letter-spacing:1px;
+  text-decoration:none;transition:all 0.15s;
+}
+.nav-link-btn:hover{background:var(--gold-bg);border-color:var(--gold)}
+
+.bpm-header{display:flex;align-items:baseline;gap:4px}
+.bpm-input{
+  -webkit-appearance:none;appearance:none;width:52px;text-align:center;
+  font-family:var(--serif);font-size:22px;color:var(--purple);
+  background:transparent;border:none;border-bottom:1px solid var(--border);
+  outline:none;padding:0 2px 2px;
+}
+.bpm-input::-webkit-inner-spin-button,.bpm-input::-webkit-outer-spin-button{-webkit-appearance:none}
+.bpm-unit{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+
+/* TABS */
+.tabs{
+  flex-shrink:0;display:flex;gap:6px;padding:10px 14px;background:var(--s1);
+  border-bottom:1px solid var(--border);overflow-x:auto;white-space:nowrap;
+}
+.tabs::-webkit-scrollbar{display:none}
+.tab-btn{
+  flex-shrink:0;padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);
+  background:transparent;color:var(--muted);font-size:12px;font-weight:600;
+  cursor:pointer;transition:all 0.15s;
+}
+.tab-btn.active{background:var(--purple);border-color:var(--purple);color:#111}
+
+/* MAIN GRID */
+.body-grid{flex:1;display:grid;grid-template-columns:240px 1fr;min-height:0}
+
+/* LEFT LIST */
+.rud-list{border-right:1px solid var(--border);overflow-y:auto;background:var(--s1)}
+.rud-group{border-bottom:1px solid var(--border)}
+.rud-group-header{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;cursor:pointer;background:var(--bg);user-select:none}
+.rud-group-label{display:flex;align-items:center;gap:7px;font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:700}
+.g-dot{width:6px;height:6px;border-radius:50%}
+.rud-group-arrow{font-size:10px;color:var(--dim);transition:transform 0.2s}
+.rud-group-arrow.open{transform:rotate(180deg)}
+.rud-items{display:none}
+.rud-items.open{display:block}
+.rud-row{
+  padding:10px 12px 10px 20px;cursor:pointer;font-size:13px;color:var(--muted);
+  border-bottom:1px solid rgba(255,255,255,0.02);display:flex;align-items:center;gap:8px;
+}
+.rud-row.active{color:var(--purple);background:var(--purple-bg)}
+.rud-row-num{font-size:9px;color:var(--dim);min-width:14px}
+
+/* PANEL DERECHO */
+.panel{display:flex;flex-direction:column;padding:16px;gap:16px;overflow-y:auto}
+.rud-header{margin-bottom:4px}
+.rud-name{font-family:var(--serif);font-size:22px;font-weight:400;line-height:1.2;color:var(--text)}
+.rud-sub{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:6px;display:flex;align-items:center;gap:8px}
+.cat-pill{padding:2px 8px;border-radius:10px;font-size:9px;letter-spacing:1px;font-weight:700}
+
+/* Secuencia */
+.seq-wrap{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:12px}
+.seq-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:10px}
+.seq-row{display:flex;flex-wrap:wrap;gap:6px}
+.sq{
+  width:34px;height:34px;border-radius:6px;display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;border:1px solid var(--border);background:var(--s2);transition:all 0.07s;
+}
+.sq.D{color:var(--blue)}
+.sq.I{color:var(--red)}
+.sq.K{color:var(--gold)}
+.sq.H{color:var(--emerald)}
+.sq.active{transform:scale(1.1);border-color:currentColor}
+.sq.active.D{background:var(--blue-bg)}
+.sq.active.I{background:var(--red-bg)}
+.sq.active.K{background:var(--gold-bg)}
+.sq.active.H{background:var(--emerald-bg)}
+
+/* Práctica */
+.practice{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:14px}
+.practice-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.prac-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--dim)}
+
+.mtoggle{display:flex;border:1px solid var(--border);border-radius:4px;overflow:hidden}
+.mtbtn{padding:5px 14px;font-size:10px;letter-spacing:1px;text-transform:uppercase;border:none;background:transparent;color:var(--dim);cursor:pointer}
+.mtbtn.active{background:var(--purple);color:#111;font-weight:700}
+
+#btnLeftHand{
+  border:1px solid var(--border);border-radius:4px;padding:5px 11px;font-size:10px;letter-spacing:1px;
+  text-transform:uppercase;transition:all 0.15s;background:transparent;color:var(--muted);cursor:pointer;font-family:var(--sans);
+}
+#btnLeftHand.active {background:rgba(179,136,255,0.12);border-color:var(--purple) !important;color:var(--purple);font-weight:700}
+
+.limbs-container{display:flex;flex-direction:column;gap:12px;background:rgba(0,0,0,0.2);padding:14px;border-radius:8px;border:1px dashed var(--border);margin-bottom:14px}
+.limbs-row{display:flex;gap:24px;justify-content:center;width:100%}
+.limb-block{display:flex;flex-direction:column;align-items:center;gap:6px}
+.limb-label{font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--dim);font-weight:700}
+
+.hand-btn{
+  width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-family:var(--serif);font-size:20px;font-weight:700;border:2px solid var(--border);background:var(--s2);color:var(--dim);
+  transition:all 0.08s;user-select:none;
+}
+.hand-btn.lit-D{background:var(--blue-bg);border-color:var(--blue);color:var(--blue);box-shadow:0 0 12px rgba(126,184,200,0.2)}
+.hand-btn.lit-I{background:var(--red-bg);border-color:var(--red);color:var(--red);box-shadow:0 0 12px rgba(224,120,120,0.2)}
+.hand-btn.lit-K{background:var(--gold-bg);border-color:var(--gold);color:var(--gold);box-shadow:0 0 12px rgba(232,184,109,0.2)}
+.hand-btn.lit-H{background:var(--emerald-bg);border-color:var(--emerald);color:var(--emerald);box-shadow:0 0 12px rgba(128,203,116,0.2)}
+
+/* Sonidos y Tap */
+.sound-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:10px}
+.sound-sel{display:flex;border:1px solid var(--border);border-radius:5px;overflow:hidden;flex:1}
+.sbtn{flex:1;padding:5px 0;font-size:10px;letter-spacing:1px;text-transform:uppercase;border:none;background:transparent;color:var(--dim);cursor:pointer;font-family:var(--sans);transition:all 0.15s}
+.sbtn.on{background:#2a2a32;color:var(--text);font-weight:600}
+.tap-btn{
+  padding:7px 14px;border-radius:5px;border:1.5px solid var(--border);background:transparent;
+  color:var(--muted);font-size:11px;font-weight:700;letter-spacing:2px;cursor:pointer;font-family:var(--sans);transition:all 0.15s;flex-shrink:0;
+}
+.tap-btn:active{background:rgba(179,136,255,0.12);border-color:var(--purple);color:var(--purple)}
+
+/* BPM Row */
+.bpm-row{display:flex;align-items:center;gap:8px}
+.bpm-slider{flex:1;-webkit-appearance:none;height:2px;background:var(--border);outline:none;border-radius:1px}
+.bpm-slider::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--purple);cursor:pointer}
+.bpm-adj{
+  width:32px;height:32px;border-radius:6px;flex-shrink:0;border:1px solid var(--border);background:var(--s2);
+  color:var(--muted);font-size:18px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.12s;user-select:none;
+}
+.bpm-adj:active{background:rgba(179,136,255,0.12);color:var(--purple);border-color:var(--purple)}
+.play-btn{width:44px;height:44px;border-radius:50%;border:1.5px solid var(--purple);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--purple);transition:all 0.15s;flex-shrink:0}
+.play-btn:hover,.play-btn.on{background:var(--purple);color:#111}
+.play-btn svg{fill:currentColor}
+
+.pulse-row{display:flex;gap:6px;justify-content:center;margin-top:10px;flex-wrap:wrap}
+.pdot{width:6px;height:6px;border-radius:50%;background:var(--border);transition:background 0.05s}
+.pdot.on{background:var(--purple)}
+
+/* Bloques */
+.train-block{display:none;flex-direction:column;gap:12px}
+.train-block.show{display:flex}
+.free-block{display:flex;flex-direction:column;gap:12px}
+.tgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tfield label{display:block;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--dim);margin-bottom:4px}
+.tfield input{width:100%;padding:8px;font-family:var(--sans);font-size:14px;background:var(--s2);border:1px solid var(--border);border-radius:4px;color:var(--text);outline:none}
+.train-status{font-size:12px;color:var(--muted);min-height:16px;text-align:center}
+.train-status .hl{color:var(--purple);font-weight:700}
+.train-controls{display:flex;align-items:center;gap:14px}
+.prog-wrap{flex:1;height:2px;background:var(--border);border-radius:1px;overflow:hidden}
+.prog-bar{height:100%;background:var(--purple);width:0%}
+
+.tip{padding:12px;background:var(--s1);border:1px solid var(--border);border-left:3px solid var(--purple);border-radius:0 var(--r) var(--r) 0;font-size:13px;line-height:1.6;color:#bbb;font-weight:300}
+
+@media(max-width:768px){
+  body{overflow-y:auto;height:auto}
+  .body-grid{grid-template-columns:1fr;min-height:none}
+  .rud-list{max-height:220px;border-right:none;border-bottom:1px solid var(--border)}
+  .panel{overflow-y:visible}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">Warm-<em>UP</em></div>
+  <div class="header-controls">
+    <a href="index.html" class="nav-link-btn">⇄ RudiMental</a>
+    <div class="bpm-header">
+      <input type="number" class="bpm-input" id="hBpm" value="80" min="30" max="240" oninput="setBpmFromInput(this.value)">
+      <span class="bpm-unit">BPM</span>
+    </div>
+  </div>
+</div>
+
+<div class="tabs" id="tabsRow">
+  <button class="tab-btn active" onclick="filterTab('Todos')">Todos</button>
+  <button class="tab-btn" onclick="filterTab('Warm-ups')">Warm-ups</button>
+  <button class="tab-btn" onclick="filterTab('Fills Lineales')">Fills Lineales</button>
+  <button class="tab-btn" onclick="filterTab('Independencia')">Independencia</button>
+</div>
+
+<div class="body-grid">
+  <div class="rud-list" id="rudList">
+    <div class="rud-group">
+      <div class="rud-group-header" onclick="toggleGroup(this)"><div class="rud-group-label"><div class="g-dot" style="background:#b388ff"></div><span style="color:#b388ff">Warm-ups</span></div><span class="rud-group-arrow open">▾</span></div>
+      <div class="rud-items open">
+        <div class="rud-row active" id="row-1" onclick="selectRud(1)"><span class="rud-row-num">01</span><span>Calentamiento Lineal Base</span></div>
+        <div class="rud-row" id="row-2" onclick="selectRud(2)"><span class="rud-row-num">02</span><span>Cimiento Rock (Acentos)</span></div>
+        <div class="rud-row" id="row-3" onclick="selectRud(3)"><span class="rud-row-num">03</span><span>Dobles Combinados</span></div>
+        <div class="rud-row" id="row-4" onclick="selectRud(4)"><span class="rud-row-num">04</span><span>Paso de Antorcha</span></div>
+      </div>
+    </div>
+    <div class="rud-group">
+      <div class="rud-group-header" onclick="toggleGroup(this)"><div class="rud-group-label"><div class="g-dot" style="background:#7eb8c8"></div><span style="color:#7eb8c8">Fills Lineales</span></div><span class="rud-group-arrow open">▾</span></div>
+      <div class="rud-items open">
+        <div class="rud-row" id="row-5" onclick="selectRud(5)"><span class="rud-row-num">05</span><span>Seisillo Clásico de Fills</span></div>
+        <div class="rud-row" id="row-6" onclick="selectRud(6)"><span class="rud-row-num">06</span><span>Tresillo Mano-Mano-Pie</span></div>
+        <div class="rud-row" id="row-7" onclick="selectRud(7)"><span class="rud-row-num">07</span><span>Rulo de 5 Lineal</span></div>
+        <div class="rud-row" id="row-8" onclick="selectRud(8)"><span class="rud-row-num">08</span><span>Herta Coordinada</span></div>
+      </div>
+    </div>
+    <div class="grp">
+    <div class="rud-group">
+      <div class="rud-group-header" onclick="toggleGroup(this)"><div class="rud-group-label"><div class="g-dot" style="background:#e8b86d"></div><span style="color:#e8b86d">Independencia</span></div><span class="rud-group-arrow open">▾</span></div>
+      <div class="rud-items open">
+        <div class="rud-row" id="row-9" onclick="selectRud(9)"><span class="rud-row-num">09</span><span>Paradiddle con Kick doble</span></div>
+        <div class="rud-row" id="row-10" onclick="selectRud(10)"><span class="rud-row-num">10</span><span>Desplazamiento de Hi-Hat</span></div>
+        <div class="rud-row" id="row-11" onclick="selectRud(11)"><span class="rud-row-num">11</span><span>Síncopa de Bombo Intercalado</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="rud-header">
+      <div class="rud-name" id="rudName">Calentamiento Lineal Base</div>
+      <div class="rud-sub">
+        <span class="cat-pill" id="catPill" style="background:rgba(179,136,255,0.12);color:#b388ff">Warm-ups</span>
+        <span id="rudNum">Ex. 01</span>
+      </div>
+    </div>
+
+    <div class="seq-wrap">
+      <div class="seq-label">Secuencia Lineal / Coordinada</div>
+      <div class="seq-row" id="seqRow"></div>
+    </div>
+
+    <div class="practice">
+      <div class="practice-top">
+        <span class="prac-label">Práctica de Extremidades</span>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <button class="mtbtn" id="btnLeftHand" onclick="toggleZurdo()">👋 Zurdo</button>
+          <div class="mtoggle">
+            <button class="mtbtn active" id="btnFree" onclick="setMode('free')">Libre</button>
+            <button class="mtbtn" id="btnTrain" onclick="setMode('train')">Acelerador</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="limbs-container">
+        <div class="limbs-row">
+          <div class="limb-block"><span class="limb-label">Mano I</span><div class="hand-btn" id="handI">I</div></div>
+          <div class="limb-block"><span class="limb-label">Mano D</span><div class="hand-btn" id="handD">D</div></div>
+        </div>
+        <div class="limbs-row">
+          <div class="limb-block"><span class="limb-label">Hi-Hat (H)</span><div class="hand-btn" id="handH">H</div></div>
+          <div class="limb-block"><span class="limb-label">Bombo (K)</span><div class="hand-btn" id="handK">K</div></div>
+        </div>
+      </div>
+
+      <div class="sound-row">
+        <div class="sound-sel">
+          <button class="sbtn on" id="sClick" onclick="setSound('click')">Click</button>
+          <button class="sbtn" id="sWood" onclick="setSound('wood')">Wood</button>
+          <button class="sbtn" id="sCow" onclick="setSound('cowbell')">Cowbell</button>
+        </div>
+        <button class="tap-btn" id="tapBtn" onclick="tapTempo()">TAP</button>
+      </div>
+
+      <div class="free-block" id="freeBlock">
+        <div class="bpm-row">
+          <button class="bpm-adj" onclick="adjustBpm(-1)">−</button>
+          <input type="range" class="bpm-slider" id="bpmSlider" min="30" max="220" value="80" oninput="setBpm(this.value)">
+          <button class="bpm-adj" onclick="adjustBpm(1)">+</button>
+          <button class="play-btn" id="playBtn" onclick="togglePlay()">
+            <svg id="playIco" width="14" height="14" viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg>
+          </button>
+        </div>
+        <div class="pulse-row" id="pulseRow"></div>
+      </div>
+
+      <div class="train-block" id="trainBlock">
+        <div class="tgrid">
+          <div class="tfield"><label>Inicio BPM</label><input type="number" id="tStart" value="60"></div>
+          <div class="tfield"><label>Objetivo</label><input type="number" id="tTarget" value="130"></div>
+          <div class="tfield"><label>Subir BPM</label><input type="number" id="tStep" value="5"></div>
+          <div class="tfield"><label>Cada Comp.</label><input type="number" id="tBars" value="4"></div>
+        </div>
+        <div class="train-status" id="trainStatus">—</div>
+        <div class="train-controls">
+          <button class="play-btn" id="trainPlayBtn" onclick="toggleTrain()">
+            <svg id="trainIco" width="14" height="14" viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg>
+          </button>
+          <div class="prog-wrap"><div class="prog-bar" id="progBar"></div></div>
+        </div>
+        <div class="pulse-row" id="trainPulseRow"></div>
+      </div>
+    </div>
+
+    <div class="tip" id="tipBox"></div>
+  </div>
+</div>
+
+<script>
+const COL = {"Warm-ups":"#b388ff", "Fills Lineales":"#7eb8c8", "Independencia":"#e8b86d"};
+const R = [
+  {id:1,cat:"Warm-ups",name:"Calentamiento Lineal Base",seq:["D","I","K","H","D","I","K","H"],tip:"Fluidez continua. Buscá que la transición de manos a pies sea uniforme, sin baches ni apuros en el tempo."},
+  {id:2,cat:"Warm-ups",name:"Cimiento Rock (Acentos)",seq:["K","D","H","D","K","D","H","D"],tip:"El Kick (K) y el Hi-hat (H) arman la base rítmica abajo mientras las manos mantienen el pulso alternado estable."},
+  {id:3,cat:"Warm-ups",name:"Dobles Combinados",seq:["D","D","I","I","K","K","H","H"],tip:"Excelente rutina para emparejar la fuerza de los golpes dobles tanto arriba como en los pedales."},
+  {id:4,cat:"Warm-ups",name:"Paso de Antorcha",seq:["D","I","D","I","K","H","K","H"],tip:"Bloques compactos de 4. Las manos entregan el control directamente a los pies de forma cíclica."},
+  {id:5,cat:"Fills Lineales",name:"Seisillo Clásico de Fills",seq:["D","I","D","I","K","K"],tip:"El rey de los fills modernos. Bajás rápido por los toms y cerrás con doble golpe contundente de bombo."},
+  {id:6,cat:"Fills Lineales",name:"Tresillo Mano-Mano-Pie",seq:["D","I","K","D","I","K"],tip:"Agrupación de a 3 notas. Genera una subdivisión que rompe la cuadratura habitual sobre ritmos de 4/4."},
+  {id:7,cat:"Fills Lineales",name:"Rulo de 5 Lineal",seq:["D","I","D","I","K"],tip:"Ideal para cortes rápidos al final de una frase rítmica antes de caer al platillo en el tiempo uno."},
+  {id:8,cat:"Fills Lineales",name:"Herta Coordinada",seq:["D","I","D","K","I","D","I","K"],tip:"Subdivisión herta clásica (dos notas rápidas y dos normales) intercalando un golpe de bombo al final."},
+  {id:9,cat:"Independencia",name:"Paradiddle con Kick doble",seq:["D","I","K","K","I","D","K","K"],tip:"Reemplazamos el diddle doble de las manos por un doble golpe de Kick (K). Control de pedal al límite."},
+  {id:10,cat:"Independencia",name:"Desplazamiento de Hi-Hat",seq:["D","H","I","H","D","H","I","H"],tip:"La mano i
